@@ -40,6 +40,9 @@ if iconfig.get("SPEC_DATA_FILES") is not None:
     from .callbacks.spec_data_file_writer import spec_comment  # noqa: F401
     from .callbacks.spec_data_file_writer import specwriter  # noqa: F401
 
+if iconfig.get("USE_BLUESKY_MAGICS", False):
+    register_bluesky_magics()
+
 # These imports must come after the above setup.
 if running_in_queueserver():
     ### To make all the standard plans available in QS, import by '*', otherwise import
@@ -56,5 +59,7 @@ else:
     from bluesky import plans as bp  # noqa: F401
 
     from .utils.controls_setup import oregistry  # noqa: F401
+
+    oregistry.warn_duplicates = False
 
 RE(make_devices())  # create all the ophyd-style control devices

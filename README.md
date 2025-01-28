@@ -3,6 +3,10 @@
 Model of a Bluesky Data Acquisition Instrument in console, notebook, &
 queueserver.
 
+------------
+![`RE.md`](./.re_md_dict.yml): RunEngine metadata
+------------
+
 ## Installation
 
 Clone the repository.
@@ -18,7 +22,7 @@ Set up the development environment.
 export ENV_NAME=bs_model_env
 conda create -y -n $ENV_NAME python=3.11 pyepics
 conda activate $ENV_NAME
-pip install -e ."[all]"
+pip install -e .[all]
 ```
 
 ## IPython console

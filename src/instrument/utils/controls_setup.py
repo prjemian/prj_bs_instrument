@@ -110,4 +110,5 @@ def set_timeouts():
 
 oregistry = Registry(auto_register=True)
 """Registry of all ophyd-style Devices and Signals."""
+
 oregistry.warn_duplicates = False
