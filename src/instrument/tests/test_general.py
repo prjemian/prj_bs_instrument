@@ -6,6 +6,7 @@ Here is just enough testing to get a CI workflow started. More are possible.
 
 import pytest
 
+from ..core.catalog_init import TEMPORARY_CATALOG_NAME
 from ..plans.sim_plans import sim_count_plan
 from ..plans.sim_plans import sim_print_plan
 from ..plans.sim_plans import sim_rel_scan_plan
@@ -28,7 +29,7 @@ def test_startup():
     assert iconfig is not None
     assert RE is not None
     assert specwriter is not None
-    if iconfig.get("DATABROKER_CATALOG", "temp") == "temp":
+    if cat.name == TEMPORARY_CATALOG_NAME:
         assert len(cat) == 0
     assert not running_in_queueserver()
 
