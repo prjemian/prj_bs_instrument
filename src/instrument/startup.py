@@ -62,4 +62,12 @@ else:
 
     oregistry.warn_duplicates = False
 
-RE(make_devices())  # create all the ophyd-style control devices
+
+def prepare_controls():
+    """Get the local controls here."""
+    yield from make_devices()
+    yield from setup_devices()
+
+
+RE(prepare_controls())  # create all the ophyd-style control devices
+logger.info("%s Bluesky session ready to use.", "*" * 40)

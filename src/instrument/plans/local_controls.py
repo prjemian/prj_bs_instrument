@@ -192,8 +192,8 @@ def setup_scaler1():
         # fmt: on
         yield from bps.sleep(1)  # wait for IOC
 
-        # choose just the channels with EPICS names
-        scaler1.select_channels()  # does not block
+    # choose just the channels with EPICS names
+    scaler1.select_channels()  # does not block
 
     # examples: make shortcuts to specific channels assigned in EPICS
 
@@ -203,6 +203,8 @@ def setup_scaler1():
     diode = scaler1.channels.chan04.s
     I000 = scaler1.channels.chan05.s
     I00 = scaler1.channels.chan06.s
+
+    I0.parent.override_signal_name.put("noisy")
 
     for item in (timebase, I0, I00, I000, scint, diode):
         logger.debug("Custom scaler channel %r", item.name)

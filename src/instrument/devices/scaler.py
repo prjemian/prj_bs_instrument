@@ -30,7 +30,7 @@ from ..utils.controls_setup import oregistry
 MAX_CHANNELS = 32
 
 
-class OverrideSourceRO(ophyd.EpicsSignalRO):
+class SubstituteScalerChannelCounts(ophyd.EpicsSignalRO):
     """Get this signal's value from another signal."""
 
     override_signal_name = None
@@ -53,7 +53,7 @@ class ScalerChannel(ophyd.scaler.ScalerChannel):
         kind=ophyd.Kind.config,
     )
     s = FCpt(
-        OverrideSourceRO,
+        SubstituteScalerChannelCounts,
         "{self.prefix}.S{self._ch_num}",
         kind=ophyd.Kind.hinted,
         auto_monitor=False,
