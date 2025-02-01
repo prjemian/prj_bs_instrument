@@ -65,6 +65,8 @@ else:
 
 def prepare_controls():
     """Get the local controls here."""
+    from .plans.local_controls import setup_devices
+
     yield from make_devices()
     yield from setup_devices()
 
