@@ -68,10 +68,13 @@ def connect_scan_id_pv(RE, pv: str = None):
     try:
         # Setup the RunEngine to call epics_scan_id_source()
         # which uses the EPICS PV to provide the scan_id.
-        scan_id_epics.wait_for_connection()
+        scan_id_epics.wait_for_connection(timeout=5)
         RE.scan_id_source = epics_scan_id_source
         RE.md["scan_id_pv"] = scan_id_epics.pvname
-        RE.md["scan_id"] = scan_id_epics.get()  # set scan_id from EPICS
+        if not scan_id_epics.connected:
+            raise TimeoutError(f"scan_id {pv=!r} not connected.")
+        # set scan_id from EPICS
+        RE.md["scan_id"] = scan_id_epics.get(use_monitor=False, timeout=5)
         logger.info("RE.md['scan_id'] connected to EPICS PV %r", pv)
     except TimeoutError as reason:
         logger.warning("Using internal 'scan_id': PV='%s', reason=%s", pv, reason)
