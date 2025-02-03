@@ -28,6 +28,7 @@ import numpy
 from apstools.devices import setup_lorentzian_swait
 from apstools.plans import run_blocking_function
 from bluesky import plan_stubs as bps
+from ophydregistry.exceptions import ComponentNotFound
 
 from ..utils.controls_setup import oregistry  # noqa: F401
 from .ad_support import ad_peak_simulation
@@ -73,10 +74,11 @@ def enable_user_calcs():
     """Enable all the user calcs, calcouts, sseqs, and transforms."""
     logger.info("enable_user_calcs()")
     for key in "user_calcouts user_calcs user_sseqs user_transforms".split():
-        obj = oregistry[key]
-        obj.wait_for_connection()
-        logger.debug("Enable %r", key)
-        yield from bps.mv(obj.enable, 1)
+        obj = oregistry.find(name=key, allow_none=True)
+        if obj is not None:
+            obj.wait_for_connection()
+            logger.debug("Enable %r", key)
+            yield from bps.mv(obj.enable, 1)
 
 
 def setup_area_detectors():
@@ -106,17 +108,20 @@ def setup_devices(*, extra_wait: float = 1):
     logger.info("Starting local controls setup.")
 
     # Order is important here.
-    yield from setup_scan_id()
-    yield from enable_user_calcs()
-    yield from change_motor_srev()
-    yield from setup_scaler1()
-    yield from change_noisy_signal_parameters()
-    yield from setup_shutter()
-    yield from setup_monochromator()
-    yield from setup_diffractometers()
-    yield from setup_temperature_positioner()
-    yield from setup_area_detectors()
-    logger.info("Local controls setup finished.")
+    try:
+        yield from setup_scan_id()
+        yield from enable_user_calcs()
+        yield from change_motor_srev()
+        yield from setup_scaler1()
+        yield from change_noisy_signal_parameters()
+        yield from setup_shutter()
+        yield from setup_monochromator()
+        yield from setup_diffractometers()
+        yield from setup_temperature_positioner()
+        yield from setup_area_detectors()
+        logger.info("Local controls setup finished.")
+    except (ComponentNotFound, TimeoutError) as reason:
+        logger.warning("Problem during setup_devices(): %s", reason)
 
 
 def setup_diffractometers():
