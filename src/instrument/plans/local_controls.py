@@ -225,8 +225,10 @@ def setup_scan_id():
 
     logger.info("setup_scan_id()")
     scan_id_epics = oregistry["scan_id_epics"]
-    scan_id_epics.wait_for_connection()
-    yield from bps.mv(scan_id_epics, len(cat))
+    if scan_id_epics.connected:
+        yield from bps.mv(scan_id_epics, len(cat))
+    else:
+        logger.warning(f"PV: {scan_id_epics.pvname} not connected, 'scan_id' reset.")
 
 
 def setup_shutter(delay=0.05):
