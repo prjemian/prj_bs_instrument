@@ -82,22 +82,27 @@ apstools.synApps.UserTransformsDevice:
 hkl.SimulatedE4CV:
   - name: sim4c
     prefix: ""
-    labels: ["diffractometer"]
+    labels: ["diffractometer", "hklpy"]
+
+hklpy2.SimulatedE4CV:
+  - name: sim4c2
+    prefix: ""
+    labels: ["diffractometer", "hklpy2"]
 
 hkl.SimulatedE6C:
   - name: sim6c
     prefix: ""
-    labels: ["diffractometer"]
+    labels: ["diffractometer", "hklpy"]
 
 hkl.SimulatedK4CV:
   - name: simk4c
     prefix: ""
-    labels: ["diffractometer"]
+    labels: ["diffractometer", "hklpy"]
 
 hkl.SimulatedK6C:
   - name: simk6c
     prefix: ""
-    labels: ["diffractometer"]
+    labels: ["diffractometer", "hklpy"]
 
 ophyd.EpicsSignalRO:
   - name: noisy
@@ -119,7 +124,7 @@ ophyd.Signal:
 instrument.devices.diffractometers.FourCircle:
   - name: fourc
     prefix: "gp:"
-    labels: ["diffractometer"]
+    labels: ["diffractometer", "hklpy"]
     m_tth: m29
     m_th: m30
     m_chi: m31
@@ -128,7 +133,7 @@ instrument.devices.diffractometers.FourCircle:
 instrument.devices.diffractometers.SixCircle:
   - name: sixc
     prefix: "gp:"
-    labels: ["diffractometer"]
+    labels: ["diffractometer", "hklpy"]
     # No defined motor assignments, pick different than fourc (m29-32)
     m_mu: m23
     m_omega: m24
