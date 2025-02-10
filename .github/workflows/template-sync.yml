@@ -5,8 +5,8 @@ name: template_sync
 on:
     # cronjob trigger
     schedule:
-      # 12:10 AM on Sunday every week
-    - cron: "10 0 * * 7"
+      # 12:10 AM once each week
+    - cron: "10 0 * * 0"
     # manual trigger
     workflow_dispatch:
 
