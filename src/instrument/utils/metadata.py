@@ -73,7 +73,7 @@ def get_md_path():
     """
     md_path_name = RE_CONFIG.get("MD_PATH", DEFAULT_MD_PATH)
     path = pathlib.Path(md_path_name)
-    logger.info("RunEngine metadata ('RE.md') saved to path: '%s'", str(path))
+    logger.info("RunEngine metadata saved in directory: %s", str(path))
     return str(path)
 
 
