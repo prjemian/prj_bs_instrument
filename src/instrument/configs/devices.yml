@@ -1,143 +1,48 @@
-# ophyd-style devices at jemian.org
-
-instrument.devices.kohzu_monochromator.KohzuDCM:
-  - name: dcm
-    prefix: "gp:"
-    labels: ["monochromator"]
-    m_th: m45
-    m_y: m46
-    m_z: m47
-
-instrument.devices.ioc_stats.IocInfoDevice: [{ name: gp_stats, prefix: "gp:" }]
-
-instrument.devices.factories.motors:
-  - {prefix: "gp:m", first: 1, last: 4, labels: ["motor"]}
-  # gp:m5 & gp:m6 reserved by gp:Slit1
-  - {prefix: "gp:m", first: 7, last: 22, labels: ["motor"]}
-  # gp:m23 .. gp:m28 used by sixc
-  # gp:m29 .. gp:m32 used by fourc
-  - {prefix: "gp:m", first: 33, last: 44, labels: ["motor"]}
-  # gp:m45 .. gp:m47 used by monochromator
-  - {prefix: "gp:m", first: 48, last: 56, labels: ["motor"]}
-
-instrument.devices.temperature_signal.TemperaturePositioner:
-  - name: temperature
-    prefix: gp:userCalc8
-    egu: C
-    limits: [-20, 255]
-
-apstools.devices.ad_creator:
-
-  - name: adsimdet
-    # IOC host: arf
-    prefix: "ad:"
-    labels: ["area_detector", "detectors"]
-    plugins:
-      - cam:
-          class: apstools.devices.SimDetectorCam_V34
-      - image
-      - pva
-      - hdf1:
-          class: apstools.devices.AD_EpicsFileNameHDF5Plugin
-          # TODO: check these paths
-          read_path_template: "/mnt/iocad/tmp/"
-          write_path_template: "/tmp/"
-      - roi1
-      - stats1
-
-  - name: adsimk
-    # IOC host: korts
-    prefix: "kad:"
-    labels: ["area_detector", "detectors"]
-    plugins:
-      - cam:
-          class: apstools.devices.SimDetectorCam_V34
-      - image
-      - pva
-      - hdf1:
-          class: apstools.devices.AD_EpicsFileNameHDF5Plugin
-          read_path_template: "/mnt/iockad/tmp/"
-          write_path_template: "/tmp/"
-      - roi1
-      - stats1
+# Guarneri-style device YAML configuration
 
 apstools.devices.SimulatedApsPssShutterWithStatus:
-  - name: shutter
-    labels: ["shutters"]
+- name: shutter
+  labels: ["shutters"]
 
-apstools.synApps.Optics2Slit2D_HV:
-  - name: slit1
-    prefix: gp:Slit1
-    labels: ["slits"]
+# ophyd.Signal:
+# - name: test
+#   value: 50.7
+# - name: t2
+#   value: 2
 
-apstools.synApps.SscanDevice: [{ name: scans, prefix: "gp:" }]
-apstools.synApps.TransformRecord:
-  [{ name: ad_transform, prefix: "gp:userTran19" }]
-apstools.synApps.UserCalcoutDevice: [{ name: user_calcouts, prefix: "gp:" }]
-apstools.synApps.UserCalcsDevice: [{ name: user_calcs, prefix: "gp:" }]
-apstools.synApps.UserStringSequenceDevice: [{ name: user_sseqs, prefix: "gp:" }]
-apstools.synApps.UserTransformsDevice:
-  [{ name: user_transforms, prefix: "gp:" }]
+# apstools.synApps.Optics2Slit2D_HV:
+# - name: slit1
+#   prefix: ioc:Slit1
+#   labels: ["slits"]
 
-hkl.SimulatedE4CV:
-  - name: sim4c
-    prefix: ""
-    labels: ["diffractometer", "hklpy"]
-
-hklpy2.SimulatedE4CV:
-  - name: sim4c2
-    prefix: ""
-    labels: ["diffractometer", "hklpy2"]
-
-hkl.SimulatedE6C:
-  - name: sim6c
-    prefix: ""
-    labels: ["diffractometer", "hklpy"]
-
-hkl.SimulatedK4CV:
-  - name: simk4c
-    prefix: ""
-    labels: ["diffractometer", "hklpy"]
-
-hkl.SimulatedK6C:
-  - name: simk6c
-    prefix: ""
-    labels: ["diffractometer", "hklpy"]
-
-ophyd.EpicsSignalRO:
-  - name: noisy
-    read_pv: gp:userCalc1
-    labels: ["detectors", "simulator"]
+# hkl.SimulatedE4CV:
+# - name: sim4c
+#   prefix: ""
+#   labels: ["diffractometer"]
 
 # ophyd.scaler.ScalerCH:
-instrument.devices.scaler.ScalerCH:
-  - name: scaler1
-    prefix: gp:scaler1
-    labels: ["scalers", "detectors"]
+# - name: scaler1
+#   prefix: vme:scaler1
+#   labels: ["scalers", "detectors"]
 
-ophyd.Signal:
-  - name: demo_signal
-    value: 1.0
-    kind: config
+# ophyd.EpicsMotor:
+# - {name: m1, prefix: gp:m1, labels: ["motor"]}
+# - {name: m2, prefix: gp:m2, labels: ["motor"]}
+# - {name: m3, prefix: gp:m3, labels: ["motor"]}
+# - {name: m4, prefix: gp:m4, labels: ["motor"]}
 
-# after the "dcm"
-instrument.devices.diffractometers.FourCircle:
-  - name: fourc
-    prefix: "gp:"
-    labels: ["diffractometer", "hklpy"]
-    m_tth: m29
-    m_th: m30
-    m_chi: m31
-    m_phi: m32
-
-instrument.devices.diffractometers.SixCircle:
-  - name: sixc
-    prefix: "gp:"
-    labels: ["diffractometer", "hklpy"]
-    # No defined motor assignments, pick different than fourc (m29-32)
-    m_mu: m23
-    m_omega: m24
-    m_chi: m25
-    m_phi: m26
-    m_gamma: m27
-    m_delta: m28
+# apstools.devices.ad_creator:
+#   - name: adsimdet
+#     prefix: "ad:"
+#     labels: ["area_detector", "detectors"]
+#     plugins:
+#       - cam:
+#           class: apstools.devices.SimDetectorCam_V34
+#       - image
+#       - pva
+#       - hdf1:
+#           class: apstools.devices.AD_EpicsFileNameHDF5Plugin
+#           read_path_template: "/path/to/bluesky/tmp/"
+#           write_path_template: "/path/to/ioc/tmp/"
+#       - roi1
+#       - stats1

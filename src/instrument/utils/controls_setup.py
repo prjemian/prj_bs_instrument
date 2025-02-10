@@ -62,28 +62,18 @@ def connect_scan_id_pv(RE, pv: str = None):
         scan_id_epics = EpicsSignal(pv, name="scan_id_epics")
     except TypeError:  # when Sphinx substitutes EpicsSignal with _MockModule
         return
+    logger.info("Using EPICS PV %r for RunEngine 'scan_id'", pv)
 
-    original_source = RE.scan_id_source  # In case UNDO is needed.
+    # Setup the RunEngine to call epics_scan_id_source()
+    # which uses the EPICS PV to provide the scan_id.
+    RE.scan_id_source = epics_scan_id_source
 
+    scan_id_epics.wait_for_connection()
     try:
-        # Setup the RunEngine to call epics_scan_id_source()
-        # which uses the EPICS PV to provide the scan_id.
-        scan_id_epics.wait_for_connection(timeout=5)
-        RE.scan_id_source = epics_scan_id_source
         RE.md["scan_id_pv"] = scan_id_epics.pvname
-        if not scan_id_epics.connected:
-            raise TimeoutError(f"scan_id {pv=!r} not connected.")
-        # set scan_id from EPICS
-        RE.md["scan_id"] = scan_id_epics.get(use_monitor=False, timeout=5)
-        logger.info("RE.md['scan_id'] connected to EPICS PV %r", pv)
-    except TimeoutError as reason:
-        logger.warning("Using internal 'scan_id': PV='%s', reason=%s", pv, reason)
-        RE.scan_id_source = original_source
-    except TypeError as reason:
-        # Such as PersistentDict errors that only raise when making the docs
-        logger.warning("Using internal 'scan_id': reason=%s", reason)
-        print(f"Using internal 'scan_id' ({reason})")
-        RE.scan_id_source = original_source
+        RE.md["scan_id"] = scan_id_epics.get()  # set scan_id from EPICS
+    except TypeError:
+        pass  # Ignore PersistentDict errors that only raise when making the docs
 
 
 def set_control_layer(control_layer: str = DEFAULT_CONTROL_LAYER):
@@ -120,5 +110,4 @@ def set_timeouts():
 
 oregistry = Registry(auto_register=True)
 """Registry of all ophyd-style Devices and Signals."""
-
 oregistry.warn_duplicates = False

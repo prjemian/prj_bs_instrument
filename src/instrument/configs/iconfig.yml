@@ -6,20 +6,19 @@ ICONFIG_VERSION: 2.0.0
 # Add additional configuration for use with your instrument.
 
 ### The short name for the databroker catalog.
-DATABROKER_CATALOG: &databroker_catalog training
+DATABROKER_CATALOG: &databroker_catalog temp
 
 ### RunEngine configuration
 RUN_ENGINE:
     DEFAULT_METADATA:
         beamline_id: instrument
-        instrument_name: Bluesky Instrument for synApps docker IOCs
-        proposal_id: developer
+        instrument_name: Most Glorious Scientific Instrument
+        proposal_id: commissioning
         databroker_catalog: *databroker_catalog
 
     ### EPICS PV to use for the `scan_id`.
     ### Default: `RE.md["scan_id"]` (not using an EPICS PV)
     # SCAN_ID_PV: f"{IOC}bluesky_scan_id"
-    SCAN_ID_PV: "gp:gp:int20"
 
     ### Where to "autosave" the RE.md dictionary.
     ### Defaults:
