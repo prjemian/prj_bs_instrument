@@ -5,13 +5,13 @@ name: template_sync
 on:
     # cronjob trigger
     schedule:
-      # 12:10 AM on the first day of every month
-    - cron: "10 0 1 * *"
+      # 12:10 AM on Sunday every week
+    - cron: "10 0 * * 7"
     # manual trigger
     workflow_dispatch:
 
 env:
-  TEMPLATE_REPO: BCDA-APS/bs_model_instrument
+  TEMPLATE_REPO: BCDA-APS/BITS
 
 jobs:
   repo-sync:
